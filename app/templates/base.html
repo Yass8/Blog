@@ -4,17 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Mon Blog{% endblock %}</title>
-    <link href="{{ url_for('static', filename='dist/output.css') }}" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', filename='dist/output.css') }}" rel="stylesheet">
 </head>
 <body class="font-sans bg-bg text-text min-h-screen flex flex-col">
-    <!-- Navbar -->
     <nav class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-200">
         <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
             <a href="{{ url_for('main.index') }}" class="flex items-center gap-2 text-xl font-bold text-primary">
-                <!-- Icône plume (SVG Heroicons) -->
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                 </svg>
@@ -22,6 +20,10 @@
             </a>
             <div class="flex items-center gap-4 text-sm font-medium">
                 {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('profile.view') }}" class="text-gray-600 hover:text-primary">Profil</a>
+                    {% if current_user.is_owner %}
+                        <a href="{{ url_for('admin.user_list') }}" class="text-gray-600 hover:text-primary">Utilisateurs</a>
+                    {% endif %}
                     {% if current_user.is_owner %}
                         <a href="{{ url_for('main.create_post') }}" class="flex items-center gap-1 bg-primary text-white px-4 py-2 rounded-full hover:bg-primary-dark transition">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -45,23 +47,21 @@
         </div>
     </nav>
 
-    <!-- Contenu principal -->
-    <main class="flex-grow max-w-4xl mx-auto w-full p-4">
+    <main class="flex-grow max-w-5xl mx-auto w-full p-4">
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Footer -->
     <footer class="border-t border-gray-200 mt-auto py-6 text-center text-sm text-text-light">
         <p>© {{ now.year }} Mon Blog – Propulsé par Flask & Tailwind CSS</p>
     </footer>
 
-<script>
-function toggleReplyForm(commentId) {
-    const form = document.getElementById('reply-form-' + commentId);
-    if (form) {
-        form.classList.toggle('hidden');
-    }
-}
-</script>
+    <script>
+        function toggleReplyForm(commentId) {
+            const form = document.getElementById('reply-form-' + commentId);
+            if (form) {
+                form.classList.toggle('hidden');
+            }
+        }
+    </script>
 </body>
 </html>
