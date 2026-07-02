@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #4f46e5;       /* indigo 600 */
+  --color-primary-dark: #4338ca;  /* indigo 700 */
+  --color-accent: #f59e0b;        /* amber 500 */
+  --color-bg: #f9fafb;            /* gray 50 */
+  --color-card: #ffffff;
+  --color-text: #1f2937;          /* gray 800 */
+  --color-text-light: #6b7280;    /* gray 500 */
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: 'Merriweather', serif;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Détail de {{ user.username }}{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white rounded-lg shadow p-6 mt-8">
+    <a href="{{ url_for('admin.user_list') }}" class="text-primary hover:underline mb-4 inline-block">&larr; Retour à la liste</a>
+    <h1 class="text-2xl font-bold mb-4">{{ user.username }}</h1>
+    <div class="space-y-2">
+        <p><span class="font-medium">Email :</span> {{ user.email }}</p>
+        <p><span class="font-medium">Rôle :</span> {{ 'Owner' if user.is_owner else 'Visiteur' }}</p>
+        <p><span class="font-medium">Bio :</span> {{ user.bio or 'Aucune' }}</p>
+        <p><span class="font-medium">Inscrit le :</span> {{ user.created_at.strftime('%d/%m/%Y') }}</p>
+    </div>
+    <div class="mt-6 flex gap-4">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <button type="submit" name="toggle_role" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600">
+                {{ 'Rétrograder en Visiteur' if user.is_owner else 'Promouvoir Owner' }}
+            </button>
+        </form>
+        <form method="POST" onsubmit="return confirm('Supprimer définitivement {{ user.username }} ?');">
+            {{ form.hidden_tag() }}
+            <button type="submit" name="delete_user" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+                Supprimer l'utilisateur
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

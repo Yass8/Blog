@@ -1,0 +1,56 @@
+<div class="ml-4 pl-4 border-l-2 border-gray-200 mb-4">
+    <div class="bg-white rounded-lg shadow-sm p-4">
+        <div class="flex justify-between items-start">
+            <div class="flex items-center gap-2">
+                <!-- Avatar simple -->
+                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm">
+                    {{ comment.comment_author.username[0].upper() }}
+                </div>
+                <div>
+                    <span class="font-semibold text-gray-800">{{ comment.comment_author.username }}</span>
+                    {% if comment.comment_author.id == post.user_id %}
+                        <span class="ml-1 text-xs bg-primary/10 text-primary px-1.5 py-0.5 rounded-full font-medium">Auteur</span>
+                    {% endif %}
+                    <span class="text-gray-500 text-sm ml-2">{{ comment.timestamp.strftime('%d/%m/%Y %H:%M') }}</span>
+                </div>
+            </div>
+            <!-- Actions : uniquement si connecté -->
+            {% if current_user.is_authenticated %}
+                <div class="flex gap-2 text-sm">
+                    {% if current_user.id == comment.user_id %}
+                        <a href="{{ url_for('main.edit_comment', comment_id=comment.id) }}" class="text-blue-500 hover:underline">Modifier</a>
+                    {% endif %}
+                    {% if current_user.id == comment.user_id or current_user.is_owner %}
+                        <form action="{{ url_for('main.delete_comment', comment_id=comment.id) }}" method="POST"
+                              onsubmit="return confirm('Supprimer ce commentaire ?');" class="inline">
+                            <button type="submit" class="text-red-500 hover:underline">Supprimer</button>
+                        </form>
+                    {% endif %}
+                    <button onclick="toggleReplyForm({{ comment.id }})" class="text-gray-500 hover:underline">
+                        Répondre
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+        <p class="text-gray-700 mt-2">{{ comment.body }}</p>
+    </div>
+
+    <!-- Formulaire de réponse (caché par défaut) -->
+    {% if current_user.is_authenticated %}
+        <div id="reply-form-{{ comment.id }}" class="hidden mt-2 ml-4">
+            <form method="POST" action="{{ url_for('main.post', post_id=post.id) }}">
+                {{ form.hidden_tag() }}
+                <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                <textarea name="body" rows="2" class="w-full border rounded-lg p-2 text-sm" placeholder="Votre réponse..."></textarea>
+                <button type="submit" class="mt-1 bg-blue-500 text-white px-3 py-1 rounded text-sm">Répondre</button>
+            </form>
+        </div>
+    {% endif %}
+
+    <!-- Réponses -->
+    {% for reply in comment.replies %}
+        {% with comment=reply %}
+            {% include '_comment.html' %}
+        {% endwith %}
+    {% endfor %}
+</div>

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Accueil – Mon Blog{% endblock %}
+
+{% block content %}
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Derniers articles</h1>
+
+    {% if posts %}
+        <div class="grid gap-6 md:grid-cols-2">
+            {% for post in posts %}
+                <article class="bg-card rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 flex flex-col">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-2">
+                        <a href="{{ url_for('main.post', post_id=post.id) }}" class="hover:text-primary transition">
+                            {{ post.title }}
+                        </a>
+                    </h2>
+                    <div class="flex items-center gap-2 text-sm text-text-light mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        {{ post.timestamp.strftime('%d/%m/%Y à %H:%M') }}
+                        <span class="mx-1">•</span>
+                        <span>{{ post.author.username }}</span>
+                    </div>
+                    <p class="text-gray-700 mb-4 flex-grow">{{ post.body[:150] }}{% if post.body|length > 150 %}...{% endif %}</p>
+                    <a href="{{ url_for('main.post', post_id=post.id) }}"
+                       class="inline-flex items-center gap-1 text-primary font-medium hover:underline mt-auto">
+                        Lire la suite
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center text-gray-500 py-12">Aucun article pour le moment.</p>
+    {% endif %}
+{% endblock %}

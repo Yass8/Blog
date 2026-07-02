@@ -1,0 +1,24 @@
+# Dépendances
+node_modules/
+venv/
+.env
+
+# Base de données
+app.db
+
+# Fichiers compilés Tailwind
+app/static/dist/
+
+# Fichiers Python compilés et caches
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Environnements virtuels et IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Variables d’environnement
+.env
