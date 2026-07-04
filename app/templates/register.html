@@ -30,3 +30,10 @@
     <p class="mt-4 text-sm">Déjà un compte ? <a href="{{ url_for('auth.login') }}" class="text-blue-500">Connectez-vous</a></p>
 </div>
 {% endblock %}
+
+from app.models import User
+from app import db
+
+u = User.query.filter_by(email='yassirali2015@gmail.com').first()
+u.is_owner = True
+db.session.commit()

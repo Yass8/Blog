@@ -1,8 +1,8 @@
-"""Modèles complets avec User amélioré et SET NULL
+"""Ajout slug aux posts
 
-Revision ID: afa9d9f01274
+Revision ID: 3ba4b46db0d1
 Revises: 
-Create Date: 2026-07-02 22:05:23.089174
+Create Date: 2026-07-04 14:33:17.290910
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'afa9d9f01274'
+revision = '3ba4b46db0d1'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -39,8 +39,10 @@ def upgrade():
     sa.Column('body', sa.Text(), nullable=False),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.Column('slug', sa.String(length=200), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='SET NULL'),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('slug')
     )
     with op.batch_alter_table('post', schema=None) as batch_op:
         batch_op.create_index(batch_op.f('ix_post_timestamp'), ['timestamp'], unique=False)

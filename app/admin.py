@@ -50,4 +50,4 @@ def user_detail(user_id):
                         flash(f'Utilisateur {user.username} supprimé.', 'info')
                         return redirect(url_for('admin.user_list'))
                 return redirect(url_for('admin.user_detail', user_id=user.id))
-    return render_template('admin/user_detail.html', user=user)
+    return render_template('admin/user_detail.html', user=user, form=form)

@@ -38,7 +38,7 @@
     <!-- Formulaire de réponse (caché par défaut) -->
     {% if current_user.is_authenticated %}
         <div id="reply-form-{{ comment.id }}" class="hidden mt-2 ml-4">
-            <form method="POST" action="{{ url_for('main.post', post_id=post.id) }}">
+            <form method="POST" action="{{ url_for('main.post', slug=post.slug) }}">
                 {{ form.hidden_tag() }}
                 <input type="hidden" name="parent_id" value="{{ comment.id }}">
                 <textarea name="body" rows="2" class="w-full border rounded-lg p-2 text-sm" placeholder="Votre réponse..."></textarea>

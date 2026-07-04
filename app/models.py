@@ -2,6 +2,7 @@ from app import db, login_manager
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+import re
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -29,8 +30,17 @@ class Post(db.Model):
     body = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'), nullable=True)
+    slug = db.Column(db.String(200), unique=True, nullable=False)
     comments = db.relationship('Comment', backref='post', lazy='dynamic',
                                order_by='Comment.timestamp.asc()')
+    
+    @staticmethod
+    def make_slug(title):
+        # Convertit un titre en slug : minuscules, sans accents, espaces → tirets
+        title = title.lower()
+        title = re.sub(r'[^\w\s-]', '', title)  # supprime la ponctuation
+        title = re.sub(r'[\s_]+', '-', title)    # espaces et underscores → tiret
+        return title[:200].strip('-')
 
     def __repr__(self):
         return f'<Post {self.title}>'
